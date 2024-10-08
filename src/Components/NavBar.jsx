@@ -7,7 +7,7 @@ import { useAuth } from "../Auth/AuthProbider";
 const NavBar = () => {
     const { user } = useAuth()
     return (
-        <div className="flex  items-center flex-col-reverse md:flex-row justify-between md:px-5 py-1 border-b-2">
+        <div className="flex  items-center flex-col-reverse md:flex-row justify-between md:px-5 py-1 border-b-2 border-[#f2f2f2]">
             <div className="flex items-center justify-between w-full gap-3 md:justify-center md:w-fit px-10 md:px-0 ">
                 <div className='flex text-center gap-2 bg-[#f2f2f2] items-center justify-between p-3 rounded-2xl'>
                     <h1 className='text-black'>Afterglow</h1>
