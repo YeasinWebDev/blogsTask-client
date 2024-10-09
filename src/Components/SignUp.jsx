@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../Auth/AuthProbider";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SignUp = () => {
   const { login,isAuthenticated } = useAuth();
@@ -28,11 +29,14 @@ const SignUp = () => {
 
       if (data.success) {
         login(email, password);
+        toast.success("Succesfully signed Up ")
       } else {
         setError(data.message || "Registration failed");
+        toast.error("Registration failed")
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.")
     }
   };
 

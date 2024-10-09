@@ -5,6 +5,7 @@ import SignIn from "./Components/SignIn";
 import { Dashboard } from "./Components/Dashboard";
 import { AuthProvider } from "./Auth/AuthProbider";
 import PrivateRoute from "./PrivateRoute";
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         </Routes>
+        <Toaster />
       </AuthProvider>
     </Router>
   );

@@ -5,8 +5,11 @@ import { IoStatsChart } from "react-icons/io5";
 import { LuLineChart } from "react-icons/lu";
 import { CiSettings } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
+import { useAuth } from '../Auth/AuthProbider';
+import toast from 'react-hot-toast';
 
 const SideBar = () => {
+    const {logout} = useAuth()
     const navLink = [
         {
             icon: IoHomeOutline,
@@ -34,6 +37,13 @@ const SideBar = () => {
         }
     ];
 
+    const handleLogOut = (name) => {
+        if (name === 'Log out') {
+            logout()
+            toast.success("Successfully logged out")
+        }
+    }
+
     return (
         <div className='relative h-screen'>
             <div className='relative border-r-2 border-[#f2f2f2] h-screen lg:px-4 px-3 py-3 md:flex flex-col justify-between hidden'>
@@ -57,7 +67,7 @@ const SideBar = () => {
                 <div>
                     {
                         navLink.slice(4, 6).map((item, index) => (
-                            <div key={index} className="flex items-center lg:gap-3 hover:bg-[#F1F3F5] py-2 px-4 cursor-pointer">
+                            <div key={index} onClick={() => handleLogOut(item?.name)} className="flex items-center lg:gap-3 hover:bg-[#F1F3F5] py-2 px-4 cursor-pointer">
                                 <item.icon className="text-[#000000] w-5 h-5" />
                                 <span className='font-semibold hidden lg:flex xl:text-lg'>{item.name}</span>
                             </div>

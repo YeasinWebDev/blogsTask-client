@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../Auth/AuthProbider";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie"; 
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ const SignIn = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email, password);
+    toast.success("Succesfully logged in!")
   };
 
   useEffect(() => {
@@ -47,6 +49,9 @@ const SignIn = () => {
           />
         </div>
         <button className="p-3 w-full bg-[#4d3cb9] mt-4 rounded-md" type="submit">Login</button>
+      <p className="mt-4 flex items-center justify-center gap-3">
+        Don't Have Account <Link to={'/signup'} className="font-semibold  text-black text-lg">Sign Up</Link>
+      </p>
       </form>
     </div>
   );

@@ -9,6 +9,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [updateData, setUpdateData] = useState(null)
   const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
 
@@ -34,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const userData = { email, password };
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -45,6 +46,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.success) {
         Cookies.set("token", data.token, { expires: 1 }); 
+        localStorage.removeItem("user");
         localStorage.setItem("user", JSON.stringify(data.user));
         setToken(data.token);
         setUser(data.user);
@@ -75,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, isAuthenticated, user }}>
+    <AuthContext.Provider value={{ token, login, logout, isAuthenticated, user,updateData,setUpdateData }}>
       {children}
     </AuthContext.Provider>
   );
