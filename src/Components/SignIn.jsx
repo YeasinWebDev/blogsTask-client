@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../Auth/AuthProbider";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"; 
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
+  const navigate = useNavigate()
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email, password);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      return navigate('/')
+    }
+  }, [isAuthenticated])
+
 
   return (
     <div className="flex items-center flex-col justify-start pt-20 bg-[#f2f2f2] h-screen">

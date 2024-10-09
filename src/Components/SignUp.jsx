@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../Auth/AuthProbider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const { login } = useAuth();
+  const { login,isAuthenticated } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const navigate = useNavigate()
 
   // handle form
   const handleSubmit = async (e) => {
@@ -34,6 +35,12 @@ const SignUp = () => {
       setError("An error occurred. Please try again.");
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      return navigate('/')
+    }
+  }, [isAuthenticated])
 
   return (
     <div className="signup-container flex items-center flex-col justify-start pt-20 bg-[#f2f2f2] h-screen">

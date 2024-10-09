@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";  
 
 // Create AuthContext
 const AuthContext = createContext();
@@ -11,24 +12,23 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true); 
   const navigate = useNavigate();
 
-  // Check for the token and user in cookies/localStorage on initial load
-  const fetchAuthData = () => {
-    const storedToken = document.cookie
-      .split("; ")
-      .find(row => row.startsWith("token="))
-      ?.split("=")[1];
 
+  const fetchAuthData = () => {
+    const storedToken = Cookies.get("token");  
     const storedUser = localStorage.getItem("user");
 
-    setUser(JSON.parse(storedUser));
     if (storedToken) {
       setToken(storedToken);
     }
-    setLoading(false); 
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
   };
+
   useEffect(() => {
     fetchAuthData();
-  }, []);
+  }, [token,loading]);
 
   // Login function
   const login = async (email, password) => {
@@ -44,13 +44,15 @@ export const AuthProvider = ({ children }) => {
       });
       const data = await response.json();
       if (data.success) {
-        document.cookie = `token=${data.token}; path=/;`;
+        Cookies.set("token", data.token, { expires: 1 }); 
         localStorage.setItem("user", JSON.stringify(data.user));
         setToken(data.token);
         setUser(data.user);
+        setLoading(false);
         navigate('/');
       } else {
         console.error(data.message);
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error during login", error);
@@ -59,14 +61,13 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = () => {
-    document.cookie = "token=; path=/; max-age=0";
+    Cookies.remove("token");  
     localStorage.removeItem("user");
     setToken(null);
     setUser(null);
-    navigate("/login");
+    navigate("/signIn");
   };
 
-  // Helper to check if user is authenticated
   const isAuthenticated = !!token;
 
   if (loading) {
@@ -80,5 +81,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-
+// Custom hook to use AuthContext
 export const useAuth = () => useContext(AuthContext);
