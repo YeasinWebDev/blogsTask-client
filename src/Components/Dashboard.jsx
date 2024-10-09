@@ -6,7 +6,7 @@ import Content from './Content'
 
 export const Dashboard = () => {
   const { user } = useAuth()
-  console.log(user)
+  // console.log(user)
   return (
     <div className='flex w-full'>
       <SideBar />
